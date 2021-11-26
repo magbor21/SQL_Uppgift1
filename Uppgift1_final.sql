@@ -50,7 +50,7 @@ create table Klubba(
     SerialNr int not null,
     foreign key (SerialNr) references Konstruktion(SerialNr),
     foreign key (PersonNr) references Spelare(PersonNr),
-    primary key (PersonNr, SerialNr)
+    primary key (PersonNr, Nr)
 );
 
 create table Regn(
@@ -179,9 +179,9 @@ insert into Klubba(Material,Nr,PersonNr,SerialNr)
             ("Järn",5,"19810722-5611",201001),
             ("Putter",2,"20000101-1410",300100),
 			("Putter",4,"19991231-1401",300101),
-            ("Putter",2,"19960601-1414",300110),
+            ("Putter",3,"19960601-1414",300110),
             ("Putter",4,"19830520-2211",300111),
-            ("Putter",5,"19820621-4544",301000);
+            ("Putter",1,"19820621-4544",301000);
             
 	/* Operations */
 		/* Presenation is important*/
@@ -226,14 +226,7 @@ select Jacka.Modell, Jacka.Storlek, Jacka.Material, Spelare.Namn, Jacka.Initiale
 			/* 9. Delete everything related to Nicklas Jansson*/
 delete from Jacka where PersonNr = "20000101-1410";
 delete from Deltar where PersonNr = "20000101-1410";
-
-	/* must delete the club before its SerialNr */
-create temporary table temp_Klubba select * from Klubba where PersonNr = "20000101-1410";
 delete from Klubba where PersonNr = "20000101-1410";
-delete Konstruktion from Konstruktion
-	inner join temp_Klubba on (Konstruktion.SerialNr = temp_Klubba.SerialNr)
-    where temp_Klubba.PersonNr = "20000101-1410";
-drop table temp_Klubba;
 delete from Spelare where PersonNr = "20000101-1410"; /* Finally delete the player*/
 select Namn from Spelare;
 
